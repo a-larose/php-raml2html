@@ -8,11 +8,11 @@
   * @license http://www.gnu.org/licenses/gpl-2.0.html GPL v2
   */
 
-namespace RAML;  
+namespace RAML2HTML;  
 
  /**
   * RAML Path Object Class
-  * @package RAML
+  * @package RAML2HTML
   */
 class RAMLPathObject extends RAMLDataObject
 {
