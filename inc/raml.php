@@ -51,6 +51,8 @@ class RAML extends RAMLDataObject
 	 */
 	public function buildFromArray($array)
 	{
+		$array = $this->handleIncludes($array);
+		
 		$this->paths['/'] = new RAMLPathObject($this, '/');
 		
 		// Handle Base Data
@@ -76,11 +78,15 @@ class RAML extends RAMLDataObject
 			if (in_array($cleanKey, $this->verbs)) {
 				$cleanKey = strtoupper($cleanKey);
 				$cleanV = array();
-				foreach ($value['responses'] as $k => $v) {
-					$cleanV['c' . $k] = $v;
+				
+				if (isset($value['responses'])) {
+					foreach ($value['responses'] as $k => $v) {
+						$cleanV['c' . $k] = $v;
+					}
+					unset($value['responses']);
+					$value['responses'] = $cleanV;
 				}
-				unset($value['responses']);
-				$value['responses'] = $cleanV;
+				
 			}
 			unset($this->base[$key]);
 			$this->base[$cleanKey] = $value;
@@ -132,11 +138,15 @@ class RAML extends RAMLDataObject
 			} elseif (in_array($skey, $this->verbs)) {
 				$this->paths[$key]->addVerb($skey);
 				$cleanV = array();
-				foreach ($svalue['responses'] as $k => $v) {
-					$cleanV['c' . $k] = $v;
+				
+				if (isset($svalue['responses'])) {
+					foreach ($svalue['responses'] as $k => $v) {
+						$cleanV['c' . $k] = $v;
+					}
+					unset($svalue['responses']);
+					$svalue['responses'] = $cleanV;
 				}
-				unset($svalue['responses']);
-				$svalue['responses'] = $cleanV;
+				
 				unset($value[$skey]);
 				$value[strtoupper($skey)] = $svalue;
 			}
@@ -349,5 +359,34 @@ class RAML extends RAMLDataObject
 		}
 		
 		return $string;
+	}
+	
+	
+	/**
+	 * Handle Includes
+	 * Handles the Includes within the Array
+	 * @param array $array
+	 * @return array
+	 */
+	public function handleIncludes($array)
+	{
+		foreach($array as $key => $value) {
+			if (is_array($value)) {
+				$array[$key] = $this->handleIncludes($value);
+			} elseif (is_string($value) && preg_match('/^\!include ([a-z0-9_\.\/]+)/i', $value, $matches)) {
+				unset($array[$key]);
+				
+				$ext = array_pop(explode('.', $matches[1]));
+				if (in_array($ext, array('yaml', 'raml'))) {
+					$t = spyc_load_file($matches[1]);
+				} else {
+					$t = file_get_contents($matches[1]);
+				}
+				
+				$array = array_merge($t, $array);
+			}
+		}
+
+		return $array;
 	}
 }
