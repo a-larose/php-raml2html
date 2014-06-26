@@ -93,7 +93,7 @@ class RAMLDataObject
 			// convert to preg_match_all
 		} elseif (is_string($this->data[$dataKey]) && preg_match('/^\!include ([a-z_\.\/]+)/i', $this->data[$dataKey], $matches)) {
 			$ext = array_pop(explode('.', $matches[1]));
-			if (in_array($ext, 'yaml', 'raml')) {
+			if (in_array($ext, array('yaml', 'raml'))) {
 				$t = new RAMLDataOject(spyc_load_file($matches[1]));
 				$t->setMaster($this);
 				return $t;
