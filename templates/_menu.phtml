@@ -7,3 +7,16 @@
 	<li><a href="<?php echo $_SERVER['PHP_SELF']; ?>?path=<?php echo $endpoint; ?>"><?php echo $endpoint; ?></a></li>
 	<?php } ?>
 </ul>
+
+<p>&nbsp;</p>
+
+<h2>Server Status</h2>
+<?php
+$status = $RAML->pingStatus();
+if ($status == 'online'): ?>
+	<span class="online">ONLINE</span>
+<?php else: ?>
+	<span class="offline">CURRENTLY DOWN!</span>
+<?php endif; ?>
+<br />
+<small>Updated every 5 minutes</small>

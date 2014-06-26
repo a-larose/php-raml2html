@@ -389,4 +389,56 @@ class RAML extends RAMLDataObject
 
 		return $array;
 	}
+	
+	
+	/**
+	 * Ping Status
+	 * Ping the Server to find out if it's online or not
+	 * ##### SHOULD BE A GET REQUEST #####
+	 * @param string $url      defaults to baseUri
+	 * @Param array  $headers  defaults to empty array
+	 * @param int    $expire   defaults to 300 seconds or 5 minutes
+	 * @return string (online | offline)
+	 */
+	public function pingStatus($url = 'default', $headers = array(), $expire = 300, $notifyEmail = false)
+	{
+		global $cacheTimeLimit;
+		
+		if ($url == 'default') {
+			$url = $this->get('baseUri');
+		}
+		
+		$status = false;
+		if ($cacheTimeLimit && function_exists('apc_fetch')) {
+			//$status = apc_fetch('RAMLStatus' . md5($url));
+		}
+		
+		if ($status) {
+			return $status;
+		}
+		
+		// Insert CURL with Optional Headers
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+		$output = curl_exec($ch);
+		$http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		
+		$status = 'offline';
+		if (substr($http_status, 0, 1) == '2') {
+			$status = 'online';
+		}
+		
+		if ($notifyEmail && $status == 'offline') {
+			mail($notifyEmail, $this->title . ' API is Down!', 'The server at ' . $url . ' failed to be queried successfully.', 'FROM: ' . $notifyEmail);
+		}
+		
+		if ($cacheTimeLimit && function_exists('apc_store')) {
+			apc_store('RAMLStatus' . md5($url), $status, $cacheTimeLimit);
+		}
+		
+		return $status;
+	}
 }
