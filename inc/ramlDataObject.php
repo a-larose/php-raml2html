@@ -77,13 +77,16 @@ class RAMLDataObject
 	 * @param string $dataKey
 	 * @return mixed
 	 */
-	public function get($dataKey)
+	public function get($dataKey, $default = '[RAMLDataObject]')
 	{
 		if (!isset($this->data[$dataKey])) {
 			$dataKey = strtoupper($dataKey);
 		}
 		
 		if (!isset($this->data[$dataKey])) {
+			if ($default != '[RAMLDataObject]') {
+				return $default;
+			}
 			return new RAMLDataObject();
 			// shoudl return false
 		} elseif (is_array($this->data[$dataKey])) {

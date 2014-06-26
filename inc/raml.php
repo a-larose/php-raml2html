@@ -349,10 +349,10 @@ class RAML extends RAMLDataObject
 	public function handlePlaceHolders($string)
 	{
 		if (is_string($string) && preg_match('/.*({(.+)}).*/', $string, $matches)) {
-			if ($this->get($matches[2])->toString()) {
+			if ($this->get($matches[2], false)) {
 				$t = str_replace($matches[1], $this->get($matches[2]), $string);
 				return $t;
-			} elseif ($this->get('base') && $this->get('base')->get($matches[2])->toString()) {
+			} elseif ($this->get('base', false) && $this->get('base')->get($matches[2], false)) {
 				$t = str_replace($matches[1], $this->get('base')->get($matches[2]), $string);
 				return $t;
 			}
