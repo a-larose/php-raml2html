@@ -139,7 +139,7 @@ class RAMLPathObject extends RAMLDataObject
 				foreach ($value['body'] as $rkey => $rvalue) {
 					$rexample = isset($rvalue['example']) ? $rvalue['example'] : null;
 					$rschema = isset($rvalue['schema']) ? $rvalue['schema'] : null;
-					$responses[$code][] = array('type' => $rkey, 'example' => $example, 'schema' => $rschema);
+					$responses[$code][] = array('type' => $rkey, 'example' => $rexample, 'schema' => $rschema);
 				}
 			}
 		}
