@@ -410,7 +410,7 @@ class RAML extends RAMLDataObject
 		
 		$status = false;
 		if ($cacheTimeLimit && function_exists('apc_fetch')) {
-			//$status = apc_fetch('RAMLStatus' . md5($url));
+			$status = apc_fetch('RAMLStatus' . md5($url));
 		}
 		
 		if ($status) {
