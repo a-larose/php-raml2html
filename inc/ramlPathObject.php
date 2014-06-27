@@ -134,7 +134,7 @@ class RAMLPathObject extends RAMLDataObject
 			
 			if (isset($value['body']['application/json']) && is_string($value['body']['application/xml'])) {
 				$responses[$code][] = array('type' => 'application/xml', 'example' => $value['body']['application/xml']);
-			} else {
+			} elseif (isset($value['body'])) {
 				$t = 0;
 				foreach ($value['body'] as $rkey => $rvalue) {
 					$rexample = isset($rvalue['example']) ? $rvalue['example'] : null;
