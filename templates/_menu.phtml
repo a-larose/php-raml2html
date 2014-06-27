@@ -10,13 +10,16 @@
 
 <p>&nbsp;</p>
 
-<h2>Server Status</h2>
-<?php
-$status = $RAML->pingStatus();
-if ($status == 'online'): ?>
-	<span class="online">ONLINE</span>
-<?php else: ?>
-	<span class="offline">CURRENTLY DOWN!</span>
-<?php endif; ?>
-<br />
-<small>Updated every 5 minutes</small>
+<h2>
+	Server Status: 
+	
+	<?php
+	$status = $RAML->pingStatus();
+	if ($status == 'online'): ?>
+		<span class="online">Online</span>
+	<?php else: ?>
+		<span class="offline">Offline</span>
+	<?php endif; ?>
+</h2>
+
+<small style="display: block; margin: -10px 0 20px 0;">Updated every 5 minutes</small>
