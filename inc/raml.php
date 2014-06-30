@@ -376,7 +376,9 @@ class RAML extends RAMLDataObject
 			} elseif (is_string($value) && preg_match('/^\!include ([a-z0-9_\.\/]+)/i', $value, $matches)) {
 				unset($array[$key]);
 				
-				$ext = array_pop(explode('.', $matches[1]));
+				$ext_t = explode('.', $matches[1]);
+				$ext = strtolower(array_pop($ext_t));
+				
 				if (in_array($ext, array('yaml', 'raml'))) {
 					$t = spyc_load_file($matches[1]);
 				} else {
