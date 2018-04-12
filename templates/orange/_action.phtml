@@ -11,7 +11,7 @@
 
 <?php if ($RAML->action()->get('queryParameters')->isArray()): ?>
 	<?php if ($tryIt) { ?>
-	<a href="javascript:void(0);" class="badge" onClick="showTryIt();" style="margin-top: 16px; margin-right: 4%; float: right; background: #333;">Try It</a>
+	<a href="javascript:void(0);" class="badge" onClick="showTryIt();" style="margin-top: 16px; float: right; background: #333;">Try It</a>
 	<?php } ?>
 	<h3>Query Parameters</h3>
 	<table>
@@ -87,6 +87,7 @@
 
 
 <h3>Code Samples</h3>
+<br />
 <a href="javascript:void(0);" onclick="switchCodeSample('codeSamplesJS','codeSampleLinkJS');" id="codeSampleLinkJS" class="codeSampleLink">JavaScript</a>
 <a href="javascript:void(0);" onclick="switchCodeSample('codeSamplesPHP','codeSampleLinkPHP');" id="codeSampleLinkPHP" class="codeSampleLink">PHP</a>
 <a href="javascript:void(0);" onclick="switchCodeSample('codeSamplesRails','codeSampleLinkRails');" id="codeSampleLinkRails" class="codeSampleLink">Rails</a>
@@ -110,7 +111,7 @@
 <h3>Response</h3>
 
 <?php foreach ($RAML->path()->getResponses() as $code => $responses) { ?>
-	<tt><strong><?php echo $code; ?>:</strong></tt><br /><br />
+	<h6><?php echo $code; ?>:</h6>
 	
 	<?php 
 		foreach ($responses as $response) {
@@ -118,10 +119,11 @@
 				continue;
 			}
 			 
-			echo '<tt>' . (is_array($response['type']) ? array_shift($response['type']) : $response['type']) . '</tt>';
+			echo '<span class="responseText">' . (is_array($response['type']) ? array_shift($response['type']) : $response['type']) . '</span>';
 			
 			if (isset($response['example'])):
 	?>
+	<br /><br />
 	<div class="apiresponse">
 			<?php echo formatResponse($response['example']); ?>
 	</div>

@@ -12,4 +12,13 @@ $cacheTimeLimit = '36000';
 // Path to the theme file for the docs
 $docsTheme = 'templates/grey/index.phtml';
 
+// Enable Try It (alpha)
+$tryIt = false;
+
+// Enable Disqus
+$disqus = false;
+
+// Disqus Short Name for Site (see Disqus admin)
+$disqus_shortname = '';
+
 ?>

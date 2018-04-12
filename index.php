@@ -1,7 +1,7 @@
 <?php
 /**
   * RAML2HTML for PHP -- A Simple API Docs Script for RAML & PHP
-  * @version 1.1beta
+  * @version 1.3beta
   * @author Mike Stowe <me@mikestowe.com>
   * @link https://github.com/mikestowe/php-raml2html
   * @link http://www.mikestowe.com/2014/05/raml-2-html.php
@@ -12,14 +12,15 @@ require_once('inc/spyc.php');
 require_once('inc/ramlDataObject.php');
 require_once('inc/raml.php');
 require_once('inc/ramlPathObject.php');
+require_once('inc/markdown.php');
+require_once('inc/codeSamples.php');
 require_once('config.php');
 
 
 // Dangling Function
-function formatResponse($text) {	
-	return str_replace(array(" ", "\n"), array("&nbsp;", "<br />"), htmlentities($text));
+function formatResponse($text) {
+        return str_replace(array(" ", "\n"), array("&nbsp;", "<br />"), htmlspecialchars($text, ENT_QUOTES));
 }
-
 
 // Handle Caching and Build
 $RAML = false;

@@ -1,6 +1,21 @@
 <html>
 	<head>
 		<title><?php echo $RAML->title; ?>: <?php echo $RAML->getCurrentPath(); ?></title>
+		<meta charset="utf-8">
+		
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/default.min.css">
+		
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+		<script>
+			$(document).ready(function(){
+				hljs.configure({useBR: true});
+
+				$('code, div.apiresponse').each(function(i, block) {
+				  hljs.highlightBlock(block);
+				});
+			});
+		</script>
 		
 		<style type="text/css">
 		
@@ -59,6 +74,27 @@
 			
 			footer a {
 				color: #ccc;
+			}
+			
+			.alert, .info, .warning {
+				width: 96%; 
+				margin: 0;
+				padding: 8px 15px;
+				border: 2px solid #075698;
+				background: #AEEAFF;
+				color: #333;
+				font-weight: bold;
+			}
+			
+			.warning {
+				border-color: #f3961c;
+				background: #FFE5B4;
+			}
+			
+			.alert {
+				border-color: #900;
+				background: #DC381F;
+				color: #fff;
 			}
 			
 			table {
@@ -177,6 +213,20 @@
 		    	color: #63a8e2;
 		    }
 		    
+		    .codeSampleLink {
+		    	display: inline-block;
+		    	border: 1px solid #333;
+		    	padding: 5px;
+		    	margin-right: 5px;
+		    	text-decoration: none;
+		    	color: #333;
+		    }
+		    
+		    .activeCodeSample {
+		    	background: #333 !important;
+		    	color: #fff;
+		    }
+		    
 		    nav ul li a {
 		    	display: block;
 		    	padding: 0 0 10px 0;
@@ -190,7 +240,7 @@
 		    	font-weight: bold;
 		    }
 		    
-		    div.apiresponse {
+		    div.apiresponse, code {
 		    	width: 96%;
 		    	max-height: 300px;
 		    	background: #f3f3f3;
@@ -198,7 +248,7 @@
 		    	padding: 10px;
 		    	overflow: scroll;
 		    	font-family: monospace;
-		    	font-size: 10px;
+		    	font-size: 11px;
 		    }
 			
 			@media screen and (min-width: 60em ) {
@@ -239,7 +289,7 @@
 				
 				
 				<?php if($validPath && !$RAML->getCurrentAction() && $RAML->path()->description):
-					echo $RAML->path()->description; 
+					echo RAML2HTML\markdown::parse($RAML->path()->description); 
 				endif; ?>
 				
 				
@@ -268,6 +318,9 @@
 				<?php
 				if ($RAML->getCurrentAction()):
 					include('_action.phtml');
+					if ($disqus && $disqus_shortname):
+ 						include('_comments.phtml');
+					endif;
 				endif;
 				?>
 				
